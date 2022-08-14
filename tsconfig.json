@@ -13,9 +13,10 @@
     "paths": {
       "*": ["node_modules/*"]
     },
-    "jsx": "react"
+    "jsx": "react",
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "./global.d.ts"
   ]
 }

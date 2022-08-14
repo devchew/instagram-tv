@@ -1,0 +1,58 @@
+$translateX: 100vh;
+$translateY: 50vh;
+$maxElementsInLoopPerSide: 50;
+
+.carousel {
+    &__slides {
+        position: relative;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+    }
+    &__slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        box-sizing: content-box;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 0;
+        transition: transform ease-in-out 1s;
+
+        &--before, &--prev {
+            z-index: 8;
+            transform:  rotate(-15deg) translateX(-1 * $translateX) translateY($translateY);
+        }
+
+        &--after, &--next {
+            z-index: 12;
+            transform:  rotate(15deg) translateX(1 * $translateX) translateY($translateY);
+        }
+
+        &--before{
+            @for $i from 1 through $maxElementsInLoopPerSide {
+                &--#{$i} {
+                    transform:  rotate(-15deg - $i) translateX((-1 * $translateX) - ($i * 5)) translateY($translateY  - ($i  * 2));
+                }
+            }
+        }
+
+        &--after{
+            @for $i from 1 through $maxElementsInLoopPerSide {
+                &--#{$i} {
+                    z-index: 100 - $i;
+                    transform:  rotate(15deg - $i) translateX($translateX + ($i * 5)) translateY($translateY);
+                }
+            }
+        }
+
+        &--current {
+            z-index: 100;
+            transform: translateX(0) translateY(0);
+        }
+    }
+}
