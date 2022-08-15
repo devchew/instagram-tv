@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "dotenv electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -54,7 +54,9 @@
                   "html": "./src/index.html",
                   "js": "./src/renderer.ts",
                   "name": "main_window",
-                  "preload": { "js": "./src/preload.ts" }
+                  "preload": {
+                    "js": "./src/preload.ts"
+                  }
                 }
               ]
             }
@@ -76,6 +78,7 @@
     "@typescript-eslint/parser": "^4.33.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "css-loader": "^6.7.1",
+    "dotenv-cli": "^6.0.0",
     "electron": "20.0.2",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",
