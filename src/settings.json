@@ -1,7 +1,5 @@
 {
-  "instagramFeedUrl": "https://www.instagram.com/explore/locations/663072778/rynek-kawiarnia-galeria/?__a=1",
-  "maxImageHeight": 750,
-  "maxShownImages": 5,
-  "secondsPerSlide": 8,
+  "maxShownImages": 21,
+  "secondsPerSlide": 10,
   "updateIntervalInSeconds": 360
 }

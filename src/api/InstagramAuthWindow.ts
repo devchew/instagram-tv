@@ -19,7 +19,7 @@ export const InstagramAuth: () => Promise<string> = () => new Promise((resolve, 
         callback({
             responseHeaders: {
                 ...details.responseHeaders,
-                'Content-Security-Policy': ["script-src 'self' 'unsafe-eval' 'unsafe-inline'", "img-src 'self' 'data:' '*'"]
+                'Content-Security-Policy': ["script-src 'self' 'unsafe-eval' 'unsafe-inline'", "img-src 'self' * data: "]
             }
         })
     })

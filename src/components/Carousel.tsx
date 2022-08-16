@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import Post, { PostProps } from './Post';
 import settings from './../settings.json';
-import { fetchImages } from '../api/fetchImages';
+import { listenToData } from '../api/process';
 
 
 const Carousel: FunctionComponent = () => {
@@ -10,15 +10,25 @@ const Carousel: FunctionComponent = () => {
     const [slides, setSlides] = useState<PostProps[]>([]);
 
     useEffect(() => {
-        fetchImages.then(setSlides)
+        const storedSlides = localStorage.getItem('slides')
+        if (storedSlides) {
+            setSlides(JSON.parse(storedSlides));
+        }
+        listenToData((newSlides) => {
+            setSlides(newSlides);
+            localStorage.setItem('slides', JSON.stringify(newSlides))
+        });
     }, [])
 
     useEffect(() => {
-        const id = setInterval(nextSlide, secondsPerSlide * 1000)
-        return () => clearInterval(id)
-    }, [])
+        console.log('resert')
+        let intervalId = setInterval(() => nextSlide(), secondsPerSlide * 1000);
+        return () => {
+            clearInterval(intervalId)
+        }
+    }, [slides])
 
-    const nextSlide = () => setCurrentSlide((current) => current > slides.length ? 0 : current + 1)
+    const nextSlide = () => setCurrentSlide(current => (current + 1) % slides.length || 0)
 
     const posts = slides.map((slide, index) => {
         const isCurrent = index === currentSlide;
@@ -34,9 +44,9 @@ const Carousel: FunctionComponent = () => {
             <div
                 className={[
                     'carousel__slide',
-                    isCurrent && 'carousel__slide--current',
-                    index < currentSlide && `carousel__slide--before-${index - currentSlide}`,
-                    index > currentSlide && `carousel__slide--after-${currentSlide - index}`
+                    isCurrent && 'carousel__slide--current' || '',
+                    index < currentSlide && `carousel__slide--before-${index - currentSlide}` || '',
+                    index > currentSlide && `carousel__slide--after-${currentSlide - index}` || ''
                 ].join(' ')}
                 key={slide.id}
             >

@@ -106,7 +106,7 @@ $badge-new-text: 'Nowe';
 		padding: 0;
 		margin: 0;
 		position: relative;
-		height: calc(100% - 110px);		
+		height: calc(100% - 110px);
 		max-height: calc(90vh - 110px); /* dirtyfix */
 		display: flex;
 		align-items: center;
@@ -119,6 +119,7 @@ $badge-new-text: 'Nowe';
 			margin: auto;
 			flex-grow: 0;
 			flex-shrink: 1;
+			aspect-ratio: 1;
 		}
 		&-caption {
 			position: absolute;

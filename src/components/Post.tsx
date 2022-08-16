@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { formatDistance } from 'date-fns';
+import { formatDistance, parseISO, differenceInSeconds } from 'date-fns';
 import locale from 'date-fns/locale/pl';
 import IgLogo from './../assets/IgLogo.png'
 
@@ -8,21 +8,21 @@ const diferenceInSecondsToBeNew = (1000 * 60 * 60 * 24 * 7);
 export interface PostProps {
     caption: string;
     id: string;
-    image: string;
+    media_url: string;
     likes: number;
-    date: number;
+    timestamp: string;
 }
 
 const Post: FunctionComponent<PostProps> = ({
                                             caption,
                                             id,
-                                            image,
+                                            media_url,
                                             likes,
-                                            date,
+                                            timestamp,
                                         }) => {
     const now = new Date().getTime();
-    const isNew = (date + diferenceInSecondsToBeNew > now);
-    const formattedDate = formatDistance(date, new Date(), {locale});
+    const isNew = differenceInSeconds(parseISO(timestamp), now) > diferenceInSecondsToBeNew;
+    const formattedDate = formatDistance(parseISO(timestamp), new Date(), {locale});
 
     return (<article
         className={['instagram-item', isNew ? 'instagram-item--new' : ''].join(' ')}
@@ -35,7 +35,7 @@ const Post: FunctionComponent<PostProps> = ({
               </span>
         </header>
         <figure className="instagram-item__figure">
-            <img src={image} alt="" className="instagram-item__figure-image"/>
+            <img src={media_url} alt="" className="instagram-item__figure-image"/>
             <figcaption className="instagram-item__figure-caption">{caption}</figcaption>
         </figure>
         <footer className="instagram-item__footer">
