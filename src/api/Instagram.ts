@@ -85,7 +85,7 @@ export const fetchPosts = () => {
 
     const doInstagramFetchStuff: () => Promise<GetMyPosts> = () => getMyPosts(store.get('igUser.access_token'))
         .catch(() => {
-            store.clear();
+            store.delete('igUser');
             return doInstagramStuff();
         })
 

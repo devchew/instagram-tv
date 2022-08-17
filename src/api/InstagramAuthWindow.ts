@@ -8,10 +8,19 @@ export const InstagramAuth: () => Promise<string> = () => new Promise((resolve, 
     let code = '';
 
     let authWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 600,
+        height: 800,
         show: false,
+        alwaysOnTop: true,
+        center: true,
+        modal: true,
+        skipTaskbar: true,
+        titleBarStyle: 'hidden',
+
     });
+
+    authWindow.focus()
+    const focusInterval = setInterval(() => authWindow.focus(), 5000);
     // This is just an example url - follow the guide for whatever service you are using
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${appId}&redirect_uri=${redirectUri}&scope=user_profile,user_media&response_type=code`
 
@@ -39,6 +48,7 @@ export const InstagramAuth: () => Promise<string> = () => new Promise((resolve, 
 
     authWindow.on('closed', function() {
         authWindow = null;
+        clearInterval(focusInterval)
         if (code) {
             resolve(code)
         }
