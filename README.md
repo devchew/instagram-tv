@@ -11,4 +11,20 @@ npm i
 npm run make
 ```
 
-autorun
+## autorun
+
+on raspberry pi edit file
+
+```bash
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+
+and add `@instagram-tv` on end
+
+## logs
+
+logs are stored in
+
+on Linux: `~/.config/instagram-tv/logs/main.log`
+on macOS: `~/Library/Logs/instagram-tv/main.log`
+on Windows: `%USERPROFILE%\AppData\Roaming\instagram-tv\logs\main.log`

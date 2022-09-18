@@ -3,6 +3,7 @@ import { InstagramAuthWindow } from './InstagramAuthWindow';
 import { NodeStore } from './NodeStore';
 import settings from './../settings.json';
 import secrets from '../../secrets';
+import { processLog } from './log';
 
 const appId = secrets.INSTAGRAM_APP_ID;
 const appSecret = secrets.INSTAGRAM_APP_SECRET;
@@ -46,8 +47,10 @@ export const exchangeTheCodeForAToken = (code: string): Promise<ExchangeTheCodeF
         .then((resp) => resp.json())
         .then((resp: ExchangeTheCodeForAToken & Error) => new Promise((resolve, reject) => {
             if (resp.error) {
+                processLog.error('exchangeTheCodeForAToken: auth error', resp)
                 reject(resp as Error)
             }
+            processLog.info('exchangeTheCodeForAToken: refresh successfully')
             resolve(resp as ExchangeTheCodeForAToken)
         }))
 }
@@ -73,8 +76,10 @@ const exchangeTokenToLongLiveToken = (token: string): Promise<LongLiveToken> => 
         .then((resp) => resp.json())
         .then((resp: LongLiveToken & Error) => new Promise((resolve, reject) => {
             if (resp.error) {
+                processLog.error('exchangeTokenToLongLiveToken: request error', resp)
                 reject(resp as Error)
             }
+            processLog.info('exchangeTokenToLongLiveToken: exchange successfully')
             resolve(resp as LongLiveToken)
         }))
 }
@@ -92,8 +97,10 @@ const refreshLongLiveToken = (llToken: string): Promise<LongLiveToken> => {
         .then((resp) => resp.json())
         .then((resp: LongLiveToken & Error) => new Promise((resolve, reject) => {
             if (resp.error) {
+                processLog.error('refreshLongLiveToken: request error', resp)
                 reject(resp as Error)
             }
+            processLog.info('refreshLongLiveToken: refresh successfully')
             resolve(resp as LongLiveToken)
         }))
 }
@@ -113,8 +120,10 @@ export const getMyPosts = (token: string): Promise<GetMyPosts> => {
         .then((resp) => resp.json())
         .then((resp: GetMyPosts & Error) => new Promise((resolve, reject) => {
             if (resp.error) {
+                processLog.error('getMyPosts: fetch error', resp)
                 reject(resp as Error)
             }
+            processLog.info('getMyPosts: fetch successfully')
             resolve(resp as GetMyPosts)
         }))
 }
@@ -128,12 +137,13 @@ const auth = () => new Promise<string>((resolve) => {
 
     const exchangeToken = (token: string): Promise<string> => exchangeTheCodeForAToken(token)
         .then(({access_token}) => exchangeTokenToLongLiveToken(access_token))
-        .then(({access_token, expires_in}) => {
-            store.set('igUserToken', access_token);
-            store.set('igTokenExpireAt', +new Date() + sToMs(expires_in))
-            return access_token;
+        .then((token) => {
+            store.set('igUserToken', token);
+            store.set('igTokenExpireAt', +new Date() + sToMs(token.expires_in))
+            return token.access_token;
         })
-        .catch(() => authAndStore().then(exchangeToken).then((token) => {
+        .catch((e) => authAndStore().then(exchangeToken).then((token) => {
+            processLog.error('exchangeToken chain error', e)
             resolve(token);
             return token;
         }))
@@ -150,7 +160,8 @@ const auth = () => new Promise<string>((resolve) => {
             .then(({access_token}) => {
                 resolve(access_token)
             })
-            .catch(() => {
+            .catch((e) => {
+                processLog.error('refreshLongLiveToken chain error', e)
                 exchangeToken(store.store.igCode)
             })
     }
