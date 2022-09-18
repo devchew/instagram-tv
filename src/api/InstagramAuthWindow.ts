@@ -1,9 +1,10 @@
 import { BrowserWindow, session } from 'electron';
+import secrets from '../../secrets';
 
-const appId = process.env.INSTAGRAM_APP_ID;
+const appId = secrets.INSTAGRAM_APP_ID;
 const redirectUri = 'https://localhost/auth'
 
-export const InstagramAuth: () => Promise<string> = () => new Promise((resolve, reject) => {
+export const InstagramAuthWindow: () => Promise<string> = () => new Promise((resolve, reject) => {
 
     let code = '';
 

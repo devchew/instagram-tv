@@ -15,6 +15,7 @@ const Carousel: FunctionComponent = () => {
             setSlides(JSON.parse(storedSlides));
         }
         listenToData((newSlides) => {
+            console.log(newSlides);
             setSlides(newSlides);
             localStorage.setItem('slides', JSON.stringify(newSlides))
         });

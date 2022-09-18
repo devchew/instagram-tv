@@ -20,8 +20,8 @@ const createWindow = (): void => {
     const mainWindow = new BrowserWindow({
         height: 768,
         width: 1024,
-        fullscreen: true,
-        frame: false,
+        fullscreen: !!app.isPackaged,
+        frame: !app.isPackaged,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,

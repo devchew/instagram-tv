@@ -1,15 +1,18 @@
 {
-  "name": "my-new-app",
-  "productName": "my-new-app",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "instagram-tv",
+  "productName": "instagram-tv",
+  "version": "2.0.0",
+  "description": "my instagram posts slides show",
   "main": ".webpack/main",
   "scripts": {
-    "start": "dotenv electron-forge start",
+    "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "prestart": "node scripts/init.js",
+    "premake": "node scripts/init.js",
+    "prepackage": "node scripts/init.js"
   },
   "keywords": [],
   "author": {
@@ -35,10 +38,6 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
           "config": {}
         }
       ],

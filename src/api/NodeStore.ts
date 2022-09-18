@@ -1,18 +1,12 @@
 import Store from 'electron-store';
+import { LongLiveToken } from './Instagram';
 
+type StoreType = {
+    igCode: string,
+    igUserToken: LongLiveToken,
+    igTokenExpireAt: number
+}
 export const NodeStore = () =>
-    new Store({
-        name:'nodeStore',
-        schema: {
-            igCode: {
-                type: 'string'
-            },
-            igUser: {
-                type: 'object',
-                properties: {
-                    access_token: { type: 'string' },
-                    user_id: { type: 'number' },
-                }
-            }
-        }
-    })
+    new Store<StoreType>({
+        name: 'nodeStore'
+    });
