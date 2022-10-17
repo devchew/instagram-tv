@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import { InstagramAuthWindow } from './InstagramAuthWindow';
 import { NodeStore } from './NodeStore';
-import settings from './../settings.json';
 import secrets from '../../secrets';
 import { processLog } from './log';
 
@@ -11,6 +10,8 @@ const redirectUri = 'https://localhost/auth'
 const store = NodeStore();
 
 const sToMs = (s: number): number => s * 1000
+
+const oneMonthInMs = 2629746000;
 
 interface Error {
     error: {
@@ -128,43 +129,47 @@ export const getMyPosts = (token: string): Promise<GetMyPosts> => {
         }))
 }
 
+const authAndStore = () => InstagramAuthWindow().then((code) => {
+    store.set('igCode', code);
+    return code;
+})
+const exchangeToken = (token: string): Promise<string> => exchangeTheCodeForAToken(token)
+    .then(({access_token}) => exchangeTokenToLongLiveToken(access_token))
+    .then((token) => {
+        store.set('igUserToken', token);
+        store.set('igTokenExpireAt', +new Date() + sToMs(token.expires_in))
+        return token.access_token;
+    })
+    .catch((e) => authAndStore().then(exchangeToken).then((token) => {
+        processLog.error('exchangeToken chain error', e);
+        return token;
+    }))
 const auth = () => new Promise<string>((resolve) => {
 
-    const authAndStore = () => InstagramAuthWindow().then((code) => {
-        store.set('igCode', code);
-        return code;
-    })
-
-    const exchangeToken = (token: string): Promise<string> => exchangeTheCodeForAToken(token)
-        .then(({access_token}) => exchangeTokenToLongLiveToken(access_token))
-        .then((token) => {
-            store.set('igUserToken', token);
-            store.set('igTokenExpireAt', +new Date() + sToMs(token.expires_in))
-            return token.access_token;
-        })
-        .catch((e) => authAndStore().then(exchangeToken).then((token) => {
-            processLog.error('exchangeToken chain error', e)
-            resolve(token);
-            return token;
-        }))
-
-
-    if (!store.store.igCode) {
-        return authAndStore().then(exchangeToken).then(resolve);
+    if (!store.store.igCode || !store.store.igAccessToken) {
+        return authAndStore().then(exchangeToken).then((access_token) => {
+            store.set('igAccessToken', access_token);
+            return access_token
+        }).then(resolve);
     }
     if (!store.store.igUserToken.access_token) {
-        exchangeToken(store.store.igCode).then(resolve);
+        return exchangeToken(store.store.igCode).then((access_token) => {
+            store.set('igAccessToken', access_token);
+            return access_token
+        }).then(resolve);
     }
-    if (+new Date() + sToMs(settings.updateIntervalInSeconds) > store.store.igTokenExpireAt) {
-        refreshLongLiveToken(store.store.igUserToken.access_token)
+    if (+new Date() + oneMonthInMs > store.store.igTokenExpireAt) {
+        return refreshLongLiveToken(store.store.igUserToken.access_token)
             .then(({access_token}) => {
-                resolve(access_token)
+                store.set('igAccessToken', access_token);
+                return access_token
             })
             .catch((e) => {
                 processLog.error('refreshLongLiveToken chain error', e)
-                exchangeToken(store.store.igCode)
+                return exchangeToken(store.store.igCode)
             })
     }
+    resolve(store.store.igAccessToken)
 })
 
-export const fetchPosts = (): Promise<GetMyPosts> => auth().then(getMyPosts).catch(() => fetchPosts())
+export const fetchPosts = (): Promise<GetMyPosts> => auth().then(getMyPosts)

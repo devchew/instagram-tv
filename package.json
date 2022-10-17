@@ -1,11 +1,11 @@
 {
   "name": "instagram-tv",
   "productName": "instagram-tv",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "my instagram posts slides show",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron-forge start -- %NODE_DEBUG_OPTION%",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
