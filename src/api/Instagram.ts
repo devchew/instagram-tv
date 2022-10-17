@@ -3,13 +3,12 @@ import { InstagramAuthWindow } from './InstagramAuthWindow';
 import { NodeStore } from './NodeStore';
 import secrets from '../../secrets';
 import { processLog } from './log';
+import { sToMs } from '../helpers/time';
 
 const appId = secrets.INSTAGRAM_APP_ID;
 const appSecret = secrets.INSTAGRAM_APP_SECRET;
 const redirectUri = 'https://localhost/auth'
 const store = NodeStore();
-
-const sToMs = (s: number): number => s * 1000
 
 const oneMonthInMs = 2629746000;
 
@@ -50,6 +49,7 @@ export const exchangeTheCodeForAToken = (code: string): Promise<ExchangeTheCodeF
             if (resp.error) {
                 processLog.error('exchangeTheCodeForAToken: auth error', resp)
                 reject(resp as Error)
+                return resp as Error;
             }
             processLog.info('exchangeTheCodeForAToken: refresh successfully')
             resolve(resp as ExchangeTheCodeForAToken)
@@ -79,6 +79,7 @@ const exchangeTokenToLongLiveToken = (token: string): Promise<LongLiveToken> => 
             if (resp.error) {
                 processLog.error('exchangeTokenToLongLiveToken: request error', resp)
                 reject(resp as Error)
+                return resp as Error;
             }
             processLog.info('exchangeTokenToLongLiveToken: exchange successfully')
             resolve(resp as LongLiveToken)
@@ -100,6 +101,7 @@ const refreshLongLiveToken = (llToken: string): Promise<LongLiveToken> => {
             if (resp.error) {
                 processLog.error('refreshLongLiveToken: request error', resp)
                 reject(resp as Error)
+                return resp as Error;
             }
             processLog.info('refreshLongLiveToken: refresh successfully')
             resolve(resp as LongLiveToken)
@@ -122,7 +124,8 @@ export const getMyPosts = (token: string): Promise<GetMyPosts> => {
         .then((resp: GetMyPosts & Error) => new Promise((resolve, reject) => {
             if (resp.error) {
                 processLog.error('getMyPosts: fetch error', resp)
-                reject(resp as Error)
+                reject(resp as Error);
+                return resp as Error;
             }
             processLog.info('getMyPosts: fetch successfully')
             resolve(resp as GetMyPosts)
