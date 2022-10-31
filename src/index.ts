@@ -37,7 +37,7 @@ const createWindow = (): void => {
             .catch((error) => {
                 processLog.error('fetch loop error', error)
             })
-            .finally(() => setInterval(startFetchLoop, sToMs(settings.updateIntervalInSeconds)));
+            .finally(() => setTimeout(startFetchLoop, sToMs(settings.updateIntervalInSeconds)));
     };
 
     // and load the index.html of the app.
