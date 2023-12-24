@@ -31,6 +31,10 @@ const Carousel: FunctionComponent = () => {
 
     const nextSlide = () => setCurrentSlide(current => (current + 1) % slides.length || 0)
 
+    const slideCorrupted = (corruptedId: string) => {
+        setSlides(current => current.filter(({id}) => id !== corruptedId))
+    }
+
     const posts = slides.map((slide, index) => {
         const isCurrent = index === currentSlide;
 
@@ -51,7 +55,7 @@ const Carousel: FunctionComponent = () => {
                 ].join(' ')}
                 key={slide.id}
             >
-                <Post {...slide} />
+                <Post {...slide} slideCorrupted={slideCorrupted}/>
             </div>
         );
     });

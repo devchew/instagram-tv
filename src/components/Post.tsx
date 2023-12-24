@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { formatDistance, parseISO, differenceInSeconds } from 'date-fns';
+import { differenceInSeconds, formatDistance, parseISO } from 'date-fns';
 import locale from 'date-fns/locale/pl';
 import IgLogo from './../assets/IgLogo.png'
 
@@ -11,15 +11,18 @@ export interface PostProps {
     media_url: string;
     likes: number;
     timestamp: string;
+    slideCorrupted: (id: string) => void;
 }
 
-const Post: FunctionComponent<PostProps> = ({
-                                            caption,
-                                            id,
-                                            media_url,
-                                            likes,
-                                            timestamp,
-                                        }) => {
+const Post: FunctionComponent<PostProps> = (
+    {
+        caption,
+        id,
+        media_url,
+        likes,
+        timestamp,
+        slideCorrupted
+    }) => {
     const now = new Date().getTime();
     const isNew = differenceInSeconds(parseISO(timestamp), now) > diferenceInSecondsToBeNew;
     const formattedDate = formatDistance(parseISO(timestamp), new Date(), {locale});
@@ -35,7 +38,8 @@ const Post: FunctionComponent<PostProps> = ({
               </span>
         </header>
         <figure className="instagram-item__figure">
-            <img src={media_url} alt="" className="instagram-item__figure-image"/>
+            <img src={media_url} alt="" className="instagram-item__figure-image"
+                 onError={slideCorrupted.bind(this, id)}/>
             <figcaption className="instagram-item__figure-caption">{caption}</figcaption>
         </figure>
         <footer className="instagram-item__footer">

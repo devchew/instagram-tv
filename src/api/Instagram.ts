@@ -91,7 +91,7 @@ const refreshLongLiveToken = (llToken: string): Promise<LongLiveToken> => {
     const url = new URL('https://graph.instagram.com/refresh_access_token')
 
     url.search = new URLSearchParams({
-        grant_type: 'ig_exchange_token',
+        grant_type: 'ig_refresh_token',
         access_token: llToken,
     }).toString()
 
@@ -167,6 +167,7 @@ const auth = () => new Promise<string>((resolve) => {
                 store.set('igAccessToken', access_token);
                 return access_token
             })
+            .then(resolve)
             .catch((e) => {
                 processLog.error('refreshLongLiveToken chain error', e)
                 return exchangeToken(store.store.igCode)
