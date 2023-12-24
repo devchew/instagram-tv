@@ -1,4 +1,4 @@
-$item-max-width: 700px;
+$item-max-width: 58.333rem;
 $item-new-color: #FF8A65;
 $badge-new-text: 'Nowe';
 
@@ -7,111 +7,113 @@ $badge-new-text: 'Nowe';
 	&.clock {
 		color: #000;
 		position: absolute;
-		top: 2px;
-		margin-left: 0.133em;
-		margin-top: 0.133em;
-		width: 1em;
-		height: 1em;
+		top: 0.167rem;
+		margin-left: 0.133rem;
+		margin-top: 0.133rem;
+		width: 1rem;
+		height: 1rem;
 		position: relative;
-		border: solid 0.067em currentColor;
-		border-radius: 0.5em;
+		border: solid 0.067rem currentColor;
+		border-radius: 0.5rem;
 
 		&:before {
 			content: "";
 			position: absolute;
-			top: 0.467em;
-			left: 0.467em;
-			width: 0.333em;
-			height: 0.067em;
+			top: 0.467rem;
+			left: 0.467rem;
+			width: 0.333rem;
+			height: 0.067rem;
 			background-color: currentColor;
-			-webkit-transform-origin: 0% 0%;
-			transform-origin: 0% 0%;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
 		}
 
 		&:after {
 			content: "";
 			position: absolute;
-			top: 0.133em;
-			left: 0.467em;
-			width: 0.067em;
-			height: 0.4em;
+			top: 0.133rem;
+			left: 0.467rem;
+			width: 0.067rem;
+			height: 0.4rem;
 			background-color: currentColor;
-			-webkit-transform-origin: 0% 0%;
-			transform-origin: 0% 0%;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
 		}
 	}
 
 	&.heart {
 		color: #000;
 		position: relative;
-		margin-top: 6px;
-		margin-left: 5px;
-		margin-right: 5px;
-		width: 9px;
-		height: 9px;
-		border-left: solid 1px currentColor;
-		border-bottom: solid 1px currentColor;
+		margin-top: 0.5rem;
+		margin-left: 0.417rem;
+		margin-right: 0.417rem;
+		width: 0.75rem;
+		height: 0.75rem;
+		border-left: solid 0.083rem currentColor;
+		border-bottom: solid 0.083rem currentColor;
 		transform: rotate(-45deg);
 		&:before {
 			content: "";
 			position: absolute;
-			top: -5px;
-			left: -1px;
-			width: 8px;
-			height: 5px;
-			border-radius: 5px 5px 0 0;
-			border-top: solid 1px currentColor;
-			border-left: solid 1px currentColor;
-			border-right: solid 1px currentColor;
+			top: -0.417rem;
+			left: -0.083rem;
+			width: 0.667rem;
+			height: 0.417rem;
+			border-radius: 0.417rem 0.417rem 0 0;
+			border-top: solid 0.083rem currentColor;
+			border-left: solid 0.083rem currentColor;
+			border-right: solid 0.083rem currentColor;
 		}
 		&:after {
 			content: "";
 			position: absolute;
-			top: 0px;
-			left: 8px;
-			width: 5px;
-			height: 8px;
-			border-radius: 0 5px 5px 0;
-			border-top: solid 1px currentColor;
-			border-right: solid 1px currentColor;
-			border-bottom: solid 1px currentColor;
+			top: 0;
+			left: 0.667rem;
+			width: 0.417rem;
+			height: 0.667rem;
+			border-radius: 0 0.417rem 0.417rem 0;
+			border-top: solid 0.083rem currentColor;
+			border-right: solid 0.083rem currentColor;
+			border-bottom: solid 0.083rem currentColor;
 		}
 	}
 }
 .instagram-item {
+	font-size: inherit;
 	max-width: $item-max-width;
 	max-height: 90vh;
-	border-radius: 3px;
-	border: 1px solid #e6e6e6;
+	border-radius: 0.25rem;
+	border: 0.083rem solid #e6e6e6;
 	box-sizing: border-box;
 	background-color: #fff;
 	&__header {
-		padding: 15px;
+		padding: 1rem;
 	}
 	&__author {
 		text-decoration: none;
 		color: #333;
 		&-image {
-			width: 30px;
-			height: 30px;
+			width: 1.5rem;
+			height: 1.5rem;
 			float: left;
-			margin-right: 10px;
+			margin-right: 0.833rem;
 		}
 		&-name {
 			font-weight: 600;
-			line-height: 30px;
+			line-height: 1.5rem;
 		}
 	}
 	&__figure {
 		padding: 0;
 		margin: 0;
 		position: relative;
-		height: calc(100% - 110px);
-		max-height: calc(90vh - 110px); /* dirtyfix */
+		height: calc(100% - 9.167rem);
+		max-height: calc(90vh - 9.167rem); /* dirtyfix */
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		aspect-ratio: 1;
 		&-image {
 			max-width: 100%;
 			max-height: 100%;
@@ -126,7 +128,7 @@ $badge-new-text: 'Nowe';
 			bottom: 0;
 			right: 0;
 			left: 0;
-			padding: 15px;
+			padding: 1.25rem;
 			background-color: rgba(0, 0, 0, 0.5);
 			color: #fff;
 			text-overflow: ellipsis;
@@ -135,11 +137,11 @@ $badge-new-text: 'Nowe';
 		}
 	}
 	&__footer {
-		padding: 15px;
+		padding: 1rem;
 
 		&-likes {
 			display: inline-block;
-			margin-right: 10px;
+			margin-right: 0.833rem;
 		}
 		&-date {
 			display: inline-block;
@@ -149,7 +151,7 @@ $badge-new-text: 'Nowe';
 	&--new {
 		position: relative;
 		border-color: lighten($item-new-color, 15%);
-		box-shadow: 0 0 10px 0 rgba($item-new-color, 0.5);
+		box-shadow: 0 0 0.833rem 0 rgba($item-new-color, 0.5);
 		&:before {
 			content: $badge-new-text;
 			display: block;
@@ -158,8 +160,8 @@ $badge-new-text: 'Nowe';
 			top: 0;
 			background-color: $item-new-color;
 			color: #fff;
-			padding: 10px 15px;
-			border-bottom-left-radius: 10px;
+			padding: 0.833rem 1.25rem;
+			border-bottom-left-radius: 0.833rem;
 		}
 	}
 }

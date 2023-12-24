@@ -2,11 +2,14 @@
 
 @import './styles/latofonts.scss';
 
-body {
-	font-family: "Lato";
-	font-size: 9pt;
+html {
+    font-family: "Lato";
+    font-size: 14pt;
     font-style: normal;
     font-weight: 500;
+}
+
+body {
 	margin: 0 0 0 0;
 	padding: 0 0 0 0;
 }
@@ -14,7 +17,7 @@ body {
 body{
     background: #ffb347;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom, #ffcc33, #ffb347);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #ffcc33, #ffb347); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */   
+    background: linear-gradient(to bottom, #ffcc33, #ffb347); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 @import './styles/app-controls.scss';
