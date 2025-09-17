@@ -17,44 +17,58 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 
+let timeout: NodeJS.Timeout | null = null;
+
 const createWindow = (): void => {
-    // Create the browser window.
-    const mainWindow = new BrowserWindow({
-        height: 768,
-        width: 1024,
-        fullscreen: !!app.isPackaged,
-        frame: !app.isPackaged,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-        },
+  // Create the browser window.
+  const mainWindow = new BrowserWindow({
+    height: 768,
+    width: 1024,
+    fullscreen: !!app.isPackaged,
+    frame: !app.isPackaged,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    },
+  });
+
+  const startFetchLoop = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    fetchPosts("edc656263cmshb57e0103d9a2b2ep123865jsn335ffa49ef13")
+      .then((data) => mainWindow.webContents.send("listenToData", data))
+      .catch((error) => {
+        processLog.error("fetch loop error", error);
+      })
+      .finally(() =>
+        timeout = setTimeout(startFetchLoop, sToMs(settings.updateIntervalInSeconds))
+      );
+  };
+
+  ipcMain.handle("app-ready", startFetchLoop);
+
+  // and load the index.html of the app.
+  mainWindow
+    .loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+    .then(() => new Promise((res) => setTimeout(res, 10000))) // wait a second to let the window load
+    .then(startFetchLoop);
+
+  // Open the DevTools.
+  !app.isPackaged && mainWindow.webContents.openDevTools();
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        "Content-Security-Policy": [
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+          "img-src 'self' * data: ",
+        ],
+      },
     });
-
-    const startFetchLoop = () => {
-        fetchPosts()
-            .then((data) => mainWindow.webContents.send('listenToData', data.data))
-            .catch((error) => {
-                processLog.error('fetch loop error', error)
-            })
-            .finally(() => setTimeout(startFetchLoop, sToMs(settings.updateIntervalInSeconds)));
-    };
-
-    // and load the index.html of the app.
-    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY).then(startFetchLoop);
-
-    // Open the DevTools.
-    !app.isPackaged && mainWindow.webContents.openDevTools();
-
-    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-        callback({
-            responseHeaders: {
-                ...details.responseHeaders,
-                'Content-Security-Policy': ["script-src 'self' 'unsafe-eval' 'unsafe-inline'", "img-src 'self' * data: "]
-            }
-        })
-    })
-
+  });
 };
 
 // This method will be called when Electron has finished

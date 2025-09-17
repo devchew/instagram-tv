@@ -7,3 +7,4 @@ export const closeWindow = (): void => {
 };
 
 export const listenToData = electron.api.listenToData
+export const appReady = electron.api.reeady;

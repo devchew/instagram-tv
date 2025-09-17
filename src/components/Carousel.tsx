@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import Post, { PostProps } from './Post';
 import settings from './../settings.json';
-import { listenToData } from '../api/process';
+import { listenToData, appReady } from '../api/process';
 
 
 const Carousel: FunctionComponent = () => {
@@ -14,6 +14,9 @@ const Carousel: FunctionComponent = () => {
         if (storedSlides) {
             setSlides(JSON.parse(storedSlides));
         }
+    }, [])
+
+    useEffect(() => {
         listenToData((newSlides) => {
             console.log(newSlides);
             setSlides(newSlides);
@@ -22,7 +25,11 @@ const Carousel: FunctionComponent = () => {
     }, [])
 
     useEffect(() => {
-        console.log('resert')
+        appReady();
+    }, [])
+
+    useEffect(() => {
+        console.log('reset')
         let intervalId = setInterval(() => nextSlide(), secondsPerSlide * 1000);
         return () => {
             clearInterval(intervalId)
